@@ -1,0 +1,20 @@
+{
+  "name": "reel-a-stands-field-guide",
+  "seed": 11,
+  "bpm": 84,
+  "layout": "list",
+  "duration": 21,
+  "first": 2.2,
+  "step": 2.6,
+  "kicker": "THE STANDS",
+  "head": ["A FIELD GUIDE", "TO HOCKEY PARENTS"],
+  "items": [
+    {"label": "The Cowbell", "sub": "Brought it in 2019. Hasn't missed a game.", "cap": "The Cowbell. Brought it in 2019. Hasn't missed a game."},
+    {"label": "The Glass Banger", "sub": "Every hit. Every whistle. Every faceoff.", "cap": "The Glass Banger. Every hit. Every whistle. Every faceoff."},
+    {"label": "The Stat Keeper", "sub": "Shots on goal, logged in the Notes app.", "cap": "The Stat Keeper. Shots on goal, logged in the Notes app."},
+    {"label": "The Ref Whisperer", "sub": "Coaching the officials from row six.", "cap": "The Ref Whisperer. Coaching the officials from row six."},
+    {"label": "The Coffee Dad", "sub": "Silent. Got here 50 minutes early.", "cap": "The Coffee Dad. Silent. Got here 50 minutes early."}
+  ],
+  "end": "This week a league up north asked parents to leave the cowbells and air horns at home.",
+  "follow": "Follow for more from the rink."
+}

@@ -1,0 +1,24 @@
+{
+  "name": "reel-b-tournament-saturday-receipt",
+  "seed": 5,
+  "bpm": 76,
+  "layout": "ledger",
+  "duration": 24,
+  "first": 2.2,
+  "step": 1.9,
+  "kicker": "TOURNAMENT SATURDAY",
+  "head": ["ONE DAY.", "TWO GAMES."],
+  "items": [
+    {"time": "5:40 AM", "label": "Hotel, team rate", "price": "$169.00", "amt": 169.00, "cap": "5:40 AM. Hotel, team rate. $169.00"},
+    {"time": "5:52 AM", "label": "Waffle (included)", "price": "$0.00", "amt": 0.0, "cap": "5:52 AM. Waffle, included. $0.00"},
+    {"time": "6:15 AM", "label": "Rink coffee x2", "price": "$7.50", "amt": 7.50, "cap": "6:15 AM. Rink coffee, times two. $7.50"},
+    {"time": "6:20 AM", "label": "Tape. We forgot it.", "price": "$4.99", "amt": 4.99, "cap": "6:20 AM. Tape. We forgot it. $4.99"},
+    {"time": "9:10 AM", "label": "Gate fee, 2 adults", "price": "$20.00", "amt": 20.00, "cap": "9:10 AM. Gate fee, two adults. $20.00"},
+    {"time": "11:45 AM", "label": "Team lunch", "price": "$68.40", "amt": 68.40, "cap": "11:45 AM. Team lunch. $68.40"},
+    {"time": "2:05 PM", "label": "Vending machine", "price": "$3.75", "amt": 3.75, "cap": "2:05 PM. Vending machine. $3.75"},
+    {"time": "7:15 PM", "label": "Team dinner", "price": "$92.10", "amt": 92.10, "cap": "7:15 PM. Team dinner. $92.10"},
+    {"time": "9:40 PM", "label": "Pizza. Still hungry.", "price": "$18.99", "amt": 18.99, "cap": "9:40 PM. Pizza. Still hungry. $18.99"}
+  ],
+  "end": "And we play again at 8 tomorrow morning.",
+  "follow": "Follow for more from the rink."
+}
