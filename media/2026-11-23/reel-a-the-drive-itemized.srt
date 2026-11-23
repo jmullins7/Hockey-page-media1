@@ -1,0 +1,44 @@
+1
+00:00:00,300 --> 00:00:02,100
+Thanksgiving Tournament: Just The Drive.
+
+2
+00:00:02,200 --> 00:00:04,100
+Mile zero. Fill-up before we leave. $58.40
+
+3
+00:00:04,100 --> 00:00:06,000
+Mile 41. Turnpike toll. $14.75
+
+4
+00:00:06,000 --> 00:00:07,900
+Mile 96. Rest stop coffee, times two. $8.10
+
+5
+00:00:07,900 --> 00:00:09,800
+Mile 97. Jerky. For the team. $11.98
+
+6
+00:00:09,800 --> 00:00:11,700
+Mile 158. Second toll. $9.50
+
+7
+00:00:11,700 --> 00:00:13,600
+Mile 203. Water. Forgot the jug. $6.49
+
+8
+00:00:13,600 --> 00:00:15,500
+Mile 312. Hotel parking, one night. $18.00
+
+9
+00:00:15,500 --> 00:00:17,400
+Mile 624. Fill-up to get home. $54.20
+
+10
+00:00:17,400 --> 00:00:22,900
+Before the hotel. Before the entry fee. Before the turkey.
+
+11
+00:00:18,600 --> 00:00:23,000
+Follow for more from the rink.
+

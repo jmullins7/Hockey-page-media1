@@ -1,20 +1,74 @@
 {
-  "name": "reel-a-stands-field-guide",
-  "seed": 11,
-  "bpm": 84,
-  "layout": "list",
-  "duration": 21,
-  "first": 2.2,
-  "step": 2.6,
-  "kicker": "THE STANDS",
-  "head": ["A FIELD GUIDE", "TO HOCKEY PARENTS"],
-  "items": [
-    {"label": "The Cowbell", "sub": "Brought it in 2019. Hasn't missed a game.", "cap": "The Cowbell. Brought it in 2019. Hasn't missed a game."},
-    {"label": "The Glass Banger", "sub": "Every hit. Every whistle. Every faceoff.", "cap": "The Glass Banger. Every hit. Every whistle. Every faceoff."},
-    {"label": "The Stat Keeper", "sub": "Shots on goal, logged in the Notes app.", "cap": "The Stat Keeper. Shots on goal, logged in the Notes app."},
-    {"label": "The Ref Whisperer", "sub": "Coaching the officials from row six.", "cap": "The Ref Whisperer. Coaching the officials from row six."},
-    {"label": "The Coffee Dad", "sub": "Silent. Got here 50 minutes early.", "cap": "The Coffee Dad. Silent. Got here 50 minutes early."}
-  ],
-  "end": "This week a league up north asked parents to leave the cowbells and air horns at home.",
-  "follow": "Follow for more from the rink."
+ "name": "reel-a-the-drive-itemized",
+ "seed": 17,
+ "bpm": 80,
+ "layout": "ledger",
+ "duration": 23,
+ "first": 2.2,
+ "step": 1.9,
+ "kicker": "THANKSGIVING TOURNAMENT",
+ "head": [
+  "JUST THE",
+  "DRIVE."
+ ],
+ "items": [
+  {
+   "time": "MI 0",
+   "label": "Fill-up before we leave",
+   "price": "$58.40",
+   "amt": 58.4,
+   "cap": "Mile zero. Fill-up before we leave. $58.40"
+  },
+  {
+   "time": "MI 41",
+   "label": "Turnpike toll",
+   "price": "$14.75",
+   "amt": 14.75,
+   "cap": "Mile 41. Turnpike toll. $14.75"
+  },
+  {
+   "time": "MI 96",
+   "label": "Rest stop coffee x2",
+   "price": "$8.10",
+   "amt": 8.1,
+   "cap": "Mile 96. Rest stop coffee, times two. $8.10"
+  },
+  {
+   "time": "MI 97",
+   "label": "Jerky. \"For the team.\"",
+   "price": "$11.98",
+   "amt": 11.98,
+   "cap": "Mile 97. Jerky. For the team. $11.98"
+  },
+  {
+   "time": "MI 158",
+   "label": "Second toll",
+   "price": "$9.50",
+   "amt": 9.5,
+   "cap": "Mile 158. Second toll. $9.50"
+  },
+  {
+   "time": "MI 203",
+   "label": "Water. Forgot the jug.",
+   "price": "$6.49",
+   "amt": 6.49,
+   "cap": "Mile 203. Water. Forgot the jug. $6.49"
+  },
+  {
+   "time": "MI 312",
+   "label": "Hotel parking, 1 night",
+   "price": "$18.00",
+   "amt": 18.0,
+   "cap": "Mile 312. Hotel parking, one night. $18.00"
+  },
+  {
+   "time": "MI 624",
+   "label": "Fill-up to get home",
+   "price": "$54.20",
+   "amt": 54.2,
+   "cap": "Mile 624. Fill-up to get home. $54.20"
+  }
+ ],
+ "end": "Before the hotel. Before the entry fee. Before the turkey.",
+ "follow": "Follow for more from the rink."
 }
