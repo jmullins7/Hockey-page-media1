@@ -15,6 +15,32 @@ def header(img, kicker, lines, a):
     return y
 
 
+COVER_SECS = 0.4
+
+
+def cover(bg, kicker, lines, sub=None):
+    """Title card shown for the first COVER_SECS so Facebook's first-frame thumbnail is readable."""
+    img = bg.copy()
+    size = 190
+    while size > 120 and max(font(ANTON, size).getlength(s) for s in lines) > W - 2 * X:
+        size -= 6
+    hf = font(ANTON, size)
+    lh = int(size * 1.03)
+    block = len(lines) * lh
+    y0 = (H - block) // 2 - 60
+    d = ImageDraw.Draw(img)
+    d.text((W // 2, y0 - 90), kicker, font=font(INTER_B, 44), fill=RED, anchor="ma")
+    for i, s in enumerate(lines):
+        d.text((W // 2, y0 + i * lh), s, font=hf, fill=WHITE, anchor="ma")
+    if sub:
+        sf = font(INTER_SB, 48)
+        y = y0 + block + 50
+        for ln in wrap(sf, sub, W - 2 * X):
+            d.text((W // 2, y), ln, font=sf, fill=SLATE, anchor="ma")
+            y += 62
+    return img
+
+
 def footer(img, t, start, end_text, follow):
     a = ease((t - start) / 0.6)
     if a <= 0:
@@ -47,10 +73,15 @@ def build(spec, outdir):
     cues.append((end_start + 1.2, dur, spec["follow"]))
     write_srt(os.path.join(outdir, name + ".srt"), cues)
 
+    cover_img = cover(bg, spec["kicker"], spec["head"], spec.get("cover_sub")).convert("RGB")
+    cover_img.save(os.path.join(outdir, name + "-cover.jpg"), quality=92)
     for fi in range(int(dur * FPS)):
         t = fi / FPS
+        if t < COVER_SECS:
+            cover_img.save(f"{tmp}/{fi:05}.png", compress_level=1)
+            continue
         img = bg.copy()
-        y = header(img, spec["kicker"], spec["head"], ease((t - 0.2) / 0.7)) + 72
+        y = header(img, spec["kicker"], spec["head"], ease((t - COVER_SECS) / 0.5)) + 72
         if spec["layout"] == "ledger":
             total = 0.0
             for i, it in enumerate(items):

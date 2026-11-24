@@ -1,74 +1,24 @@
 {
- "name": "reel-a-the-drive-itemized",
- "seed": 17,
- "bpm": 80,
+ "name": "reel-a-black-friday-hockey-cart",
+ "seed": 41,
+ "bpm": 82,
  "layout": "ledger",
  "duration": 23,
  "first": 2.2,
  "step": 1.9,
- "kicker": "THANKSGIVING TOURNAMENT",
- "head": [
-  "JUST THE",
-  "DRIVE."
- ],
+ "kicker": "BLACK FRIDAY HOCKEY CART",
+ "head": ["SAVED $196.", "SPENT $634."],
+ "cover_sub": "The deals were real. So is the total.",
  "items": [
-  {
-   "time": "MI 0",
-   "label": "Fill-up before we leave",
-   "price": "$58.40",
-   "amt": 58.4,
-   "cap": "Mile zero. Fill-up before we leave. $58.40"
-  },
-  {
-   "time": "MI 41",
-   "label": "Turnpike toll",
-   "price": "$14.75",
-   "amt": 14.75,
-   "cap": "Mile 41. Turnpike toll. $14.75"
-  },
-  {
-   "time": "MI 96",
-   "label": "Rest stop coffee x2",
-   "price": "$8.10",
-   "amt": 8.1,
-   "cap": "Mile 96. Rest stop coffee, times two. $8.10"
-  },
-  {
-   "time": "MI 97",
-   "label": "Jerky. \"For the team.\"",
-   "price": "$11.98",
-   "amt": 11.98,
-   "cap": "Mile 97. Jerky. For the team. $11.98"
-  },
-  {
-   "time": "MI 158",
-   "label": "Second toll",
-   "price": "$9.50",
-   "amt": 9.5,
-   "cap": "Mile 158. Second toll. $9.50"
-  },
-  {
-   "time": "MI 203",
-   "label": "Water. Forgot the jug.",
-   "price": "$6.49",
-   "amt": 6.49,
-   "cap": "Mile 203. Water. Forgot the jug. $6.49"
-  },
-  {
-   "time": "MI 312",
-   "label": "Hotel parking, 1 night",
-   "price": "$18.00",
-   "amt": 18.0,
-   "cap": "Mile 312. Hotel parking, one night. $18.00"
-  },
-  {
-   "time": "MI 624",
-   "label": "Fill-up to get home",
-   "price": "$54.20",
-   "amt": 54.2,
-   "cap": "Mile 624. Fill-up to get home. $54.20"
-  }
+  {"time": "-25%", "label": "Skates. Up a size. Again.", "price": "$224.99", "amt": 224.99, "cap": "25 percent off. Skates. Up a size. Again. $224.99"},
+  {"time": "-30%", "label": "Stick. Broke one Sunday.", "price": "$167.99", "amt": 167.99, "cap": "30 percent off. Stick. Broke one Sunday. $167.99"},
+  {"time": "-20%", "label": "Gloves. Old pair is alive.", "price": "$63.99", "amt": 63.99, "cap": "20 percent off. Gloves. The old pair is alive. $63.99"},
+  {"time": "-15%", "label": "Tape, black + white x12", "price": "$33.99", "amt": 33.99, "cap": "15 percent off. Tape, black and white, times twelve. $33.99"},
+  {"time": "-40%", "label": "Practice jerseys x2", "price": "$35.98", "amt": 35.98, "cap": "40 percent off. Practice jerseys, times two. $35.98"},
+  {"time": "-10%", "label": "Neck guard, new size", "price": "$26.99", "amt": 26.99, "cap": "10 percent off. Neck guard, new size. $26.99"},
+  {"time": "0%", "label": "Sharpening punch card", "price": "$60.00", "amt": 60.0, "cap": "No discount. Sharpening punch card. $60.00"},
+  {"time": "RUSH", "label": "Shipping. Need it Friday.", "price": "$19.95", "amt": 19.95, "cap": "Rush shipping. Need it by Friday. $19.95"}
  ],
- "end": "Before the hotel. Before the entry fee. Before the turkey.",
+ "end": "Saved $196 on paper. The bank statement has notes.",
  "follow": "Follow for more from the rink."
 }

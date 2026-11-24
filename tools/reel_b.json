@@ -1,43 +1,21 @@
 {
- "name": "reel-b-spot-the-hockey-family",
- "seed": 29,
- "bpm": 86,
+ "name": "reel-b-4am-driveway-checklist",
+ "seed": 53,
+ "bpm": 76,
  "layout": "list",
  "duration": 21,
  "first": 2.2,
  "step": 2.6,
- "kicker": "THANKSGIVING DINNER",
- "head": [
-  "HOW TO SPOT",
-  "THE HOCKEY FAMILY"
- ],
+ "kicker": "4:10 AM. TRAVEL DAY.",
+ "head": ["THE DRIVEWAY", "CHECKLIST"],
+ "cover_sub": "Every hockey family runs this list in the dark.",
  "items": [
-  {
-   "label": "Leaves before pie",
-   "sub": "Puck drop is 7:50 tomorrow. Three hours away.",
-   "cap": "Leaves before pie. Puck drop is 7:50 tomorrow. Three hours away."
-  },
-  {
-   "label": "Brought the team cooler",
-   "sub": "There's still a roster taped to the lid.",
-   "cap": "Brought the team cooler. There's still a roster taped to the lid."
-  },
-  {
-   "label": "Checks the bracket during grace",
-   "sub": "Pool play schedule dropped at 6:12.",
-   "cap": "Checks the bracket during grace. Pool play schedule dropped at 6:12."
-  },
-  {
-   "label": "Skate guards in a coat pocket",
-   "sub": "Nobody asks. Everybody knows.",
-   "cap": "Skate guards in a coat pocket. Nobody asks. Everybody knows."
-  },
-  {
-   "label": "Takes leftovers \"to go\"",
-   "sub": "Destination: hotel mini-fridge.",
-   "cap": "Takes leftovers \"to go\". Destination: hotel mini-fridge."
-  }
+  {"label": "Skates", "sub": "Guards on. Checked twice in the driveway.", "cap": "Skates. Guards on. Checked twice in the driveway."},
+  {"label": "Home and away jerseys", "sub": "White one still has last Sunday on it.", "cap": "Home and away jerseys. The white one still has last Sunday on it."},
+  {"label": "Mouthguard", "sub": "Found in a cup holder. Rinsed. Counts.", "cap": "Mouthguard. Found in a cup holder. Rinsed. Counts."},
+  {"label": "Three phone chargers", "sub": "Still at 9% by the second game.", "cap": "Three phone chargers. Still at 9 percent by the second game."},
+  {"label": "The kid", "sub": "Asleep before the end of the street.", "cap": "The kid. Asleep before the end of the street."}
  ],
- "end": "Every table has one. This year it's ours.",
+ "end": "Everything's in the car. Except the stick tape.",
  "follow": "Follow for more from the rink."
 }
