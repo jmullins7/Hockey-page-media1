@@ -1,0 +1,55 @@
+{
+ "name": "reel-c-debate-night-rink-or-table",
+ "layout": "split",
+ "seed": 81,
+ "duration": 21,
+ "first": 1.5,
+ "step": 2.2,
+ "kicker": "DEBATE NIGHT",
+ "question": [
+  "THANKSGIVING TOURNAMENT.",
+  "WHO GETS THE DAY?"
+ ],
+ "head": [
+  "THE RINK",
+  "OR THE TABLE?"
+ ],
+ "cover_sub": "Thanksgiving tournament. Pick one.",
+ "sides": [
+  "THE RINK",
+  "THE TABLE"
+ ],
+ "points": [
+  [
+   0,
+   "The team paid for that ice back in August."
+  ],
+  [
+   1,
+   "Grandma isn't getting any younger."
+  ],
+  [
+   0,
+   "He won't remember the stuffing. He'll remember the OT winner."
+  ],
+  [
+   1,
+   "One November game decides nothing."
+  ],
+  [
+   0,
+   "The hotel buffet has turkey. Technically."
+  ],
+  [
+   1,
+   "Leftovers don't fit in a hockey bag."
+  ]
+ ],
+ "end": "I know my answer. My mother-in-law knows hers.",
+ "follow": "Follow for more from the rink.",
+ "music": {
+  "bpm": 92,
+  "seed": 81,
+  "prog": "c_g_am_f"
+ }
+}

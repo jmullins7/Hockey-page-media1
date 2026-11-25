@@ -1,0 +1,65 @@
+{
+ "name": "reel-b-4am-club-thanksgiving-morning",
+ "layout": "dashboard",
+ "seed": 71,
+ "duration": 22,
+ "first": 1.5,
+ "step": 2.4,
+ "kicker": "4 AM CLUB",
+ "title_small": "THANKSGIVING MORNING",
+ "head": [
+  "THANKSGIVING.",
+  "4:07 AM."
+ ],
+ "cover_sub": "The turkey stays home. We don't.",
+ "start_clock": "4:07",
+ "end_clock": "6:02",
+ "temp": "19\u00b0F",
+ "items": [
+  {
+   "time": "4:07",
+   "label": "Up before the alarm.",
+   "sub": "Again. Body just knows now.",
+   "cap": "Up before the alarm. Again. Body just knows now."
+  },
+  {
+   "time": "4:12",
+   "label": "Coffee's ready.",
+   "sub": "Set it up at 9 PM like a pro.",
+   "cap": "Coffee's ready. Set it up at 9 PM like a pro."
+  },
+  {
+   "time": "4:16",
+   "label": "Turkey check.",
+   "sub": "Still frozen solid. Noted.",
+   "cap": "Turkey check. Still frozen solid. Noted."
+  },
+  {
+   "time": "4:24",
+   "label": "Car's running.",
+   "sub": "Scraped one porthole. Good enough.",
+   "cap": "Car's running. Scraped one porthole. Good enough."
+  },
+  {
+   "time": "4:31",
+   "label": "Kid's in the back.",
+   "sub": "Asleep before the end of the block.",
+   "cap": "Kid's in the back. Asleep before the end of the block."
+  },
+  {
+   "time": "4:58",
+   "label": "Empty highway.",
+   "sub": "Just us and three other minivans.",
+   "cap": "Empty highway. Just us and three other minivans."
+  }
+ ],
+ "end": "6:02. Rink lot's already full. Happy Thanksgiving.",
+ "follow": "Follow for more from the rink.",
+ "music": {
+  "bpm": 68,
+  "seed": 71,
+  "prog": "dm_bb_f_c",
+  "drums": false,
+  "arp_density": 0.7
+ }
+}

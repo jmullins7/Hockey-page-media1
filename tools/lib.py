@@ -104,14 +104,23 @@ def midi(n):
     return 440 * 2 ** ((n - 69) / 12)
 
 
-def make_music(path, seconds, bpm=78, seed=1):
-    """Original warm lo-fi bed: pad + keys arpeggio + soft kick/hat. Am - F - C - G."""
+PROGS = {
+    "am_f_c_g": [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]],
+    "f_c_dm_bb": [[53, 57, 60], [48, 52, 55], [50, 53, 57], [46, 50, 53]],
+    "dm_bb_f_c": [[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]],
+    "c_g_am_f": [[48, 52, 55], [55, 59, 62], [57, 60, 64], [53, 57, 60]],
+    "em_c_g_d": [[52, 55, 59], [48, 52, 55], [55, 59, 62], [50, 54, 57]],
+}
+
+
+def make_music(path, seconds, bpm=78, seed=1, prog="am_f_c_g", drums=True, arp_density=0.85):
+    """Original warm lo-fi bed: pad + keys arpeggio + soft kick/hat. prog picks the chord loop."""
     rnd = np.random.default_rng(seed)
     n = int(seconds * SR)
     out = np.zeros(n + SR * 3)
     beat = 60 / bpm
     bar = beat * 4
-    prog = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]]
+    prog = PROGS[prog] if isinstance(prog, str) else prog
     bars = int(math.ceil(seconds / bar)) + 1
     for b in range(bars):
         ch = prog[b % 4]
@@ -123,12 +132,12 @@ def make_music(path, seconds, bpm=78, seed=1):
         out[s0:s0 + len(bassn)] += bassn[: len(out) - s0]
         arp = [ch[0] + 12, ch[1] + 12, ch[2] + 12, ch[1] + 12, ch[0] + 24, ch[2] + 12, ch[1] + 12, ch[2] + 12]
         for i, m in enumerate(arp):
-            if rnd.random() < 0.15:
+            if rnd.random() > arp_density:
                 continue
             si = s0 + int(i * beat / 2 * SR)
             k = _note(midi(m), 1.2) * 0.07
             out[si:si + len(k)] += k[: max(0, len(out) - si)]
-        for q in range(4):
+        for q in range(4 if drums else 0):
             si = s0 + int(q * beat * SR)
             t = np.arange(int(0.35 * SR)) / SR
             if q in (0, 2):

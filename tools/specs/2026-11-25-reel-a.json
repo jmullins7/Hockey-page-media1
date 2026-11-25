@@ -1,0 +1,71 @@
+{
+ "name": "reel-a-season-ledger-ep1-day-before",
+ "layout": "receipt",
+ "seed": 61,
+ "duration": 22,
+ "first": 1.5,
+ "step": 1.6,
+ "hold": 2.6,
+ "kicker": "THE SEASON LEDGER  \u00b7  EP. 1",
+ "head": [
+  "WE HAVEN'T LEFT.",
+  "$186.03 GONE."
+ ],
+ "cover_sub": "The day before a Thanksgiving tournament.",
+ "episode": "EP. 1  \u00b7  THE DAY BEFORE",
+ "sub_label": "TODAY",
+ "items": [
+  {
+   "label": "Gas. Filled before 5 AM",
+   "price": "$58.40",
+   "amt": 58.4,
+   "cap": "Gas. Filled up before 5 AM. $58.40"
+  },
+  {
+   "label": "Cooler groceries",
+   "price": "$64.17",
+   "amt": 64.17,
+   "cap": "Cooler groceries. $64.17"
+  },
+  {
+   "label": "Ice, 2 bags",
+   "price": "$5.98",
+   "amt": 5.98,
+   "cap": "Ice, two bags. $5.98"
+  },
+  {
+   "label": "Team pizza night share",
+   "price": "$25.00",
+   "amt": 25.0,
+   "cap": "Team pizza night, our share. $25.00"
+  },
+  {
+   "label": "Emergency sharpening",
+   "price": "$10.00",
+   "amt": 10.0,
+   "cap": "Emergency skate sharpening. $10.00"
+  },
+  {
+   "label": "Pie for a dinner we miss",
+   "price": "$14.99",
+   "amt": 14.99,
+   "cap": "A pie for the dinner we're going to miss. $14.99"
+  },
+  {
+   "label": "Stick tape. Again.",
+   "price": "$7.49",
+   "amt": 7.49,
+   "cap": "Stick tape. Again. $7.49"
+  }
+ ],
+ "today_total": 186.03,
+ "prev_std": 6214.37,
+ "new_std": 6400.4,
+ "end": "And we haven't left the driveway yet.",
+ "follow": "Follow for more from the rink.",
+ "music": {
+  "bpm": 84,
+  "seed": 61,
+  "prog": "f_c_dm_bb"
+ }
+}
