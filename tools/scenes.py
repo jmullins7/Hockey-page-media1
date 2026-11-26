@@ -6,6 +6,7 @@ Each series gets its own look instead of the shared navy page:
   dashboard -> 4 AM Club: night windshield + road, glowing dashboard clock that ticks to
                each timestamp, log of the morning stacking above.
   split     -> Debate Night: two-column split (red vs blue), points land alternately.
+  fieldguide-> Rink Field Guide: cream naturalist card on topo-green, drawn icon, entries + FIELD NOTE stamp (2026-11-26).
 
 Usage: python3 scenes.py spec.json outdir
 Everything is drawn programmatically (PIL); music is original (lib.make_music).
@@ -298,7 +299,7 @@ def render_dash(spec, t, bg, dash):
     draw_text_alpha(img, (X, 120), spec["kicker"], font(INTER_B, 36), RED, a)
     draw_text_alpha(img, (X, 172), spec["title_small"], font(ANTON, 88), WHITE, a)
     # log
-    y = 350
+    y = 330
     for i, it in enumerate(items):
         ti = t0 + i * step
         if t < ti:
@@ -312,7 +313,7 @@ def render_dash(spec, t, bg, dash):
         draw_text_alpha(img, (X + 160, y), it["label"], font(INTER_B, 50), WHITE, aa * dim, dy=int(14 * (1 - aa)))
         if it.get("sub"):
             draw_text_alpha(img, (X + 160, y + 62), it["sub"], font(INTER_M, 38), SLATE, aa * dim, dy=int(14 * (1 - aa)))
-        y += 128
+        y += 118
     if t >= end_t:
         a = ease((t - end_t) / 0.6)
         ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
@@ -416,6 +417,165 @@ def split_cues(spec):
     return cues, end_t
 
 
+
+# ---------------------------------------------------------------- FIELD GUIDE (Rink Field Guide) — added 2026-11-26
+FOREST_T, FOREST_B = (22, 44, 36), (8, 20, 16)
+CREAM = (243, 236, 216)
+MOSS = (74, 104, 78)
+INTER_I = "/usr/share/fonts/opentype/inter/Inter-Italic.otf"
+
+
+def field_bg(seed):
+    """Deep forest green with faint original topo contour lines."""
+    img = vgrad(W, H, FOREST_T, FOREST_B).convert("RGBA")
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    rnd = random.Random(seed)
+    for c in range(3):
+        cx, cy = rnd.uniform(100, W - 100), rnd.uniform(200, H - 200)
+        for r in range(60, 1400, 46):
+            pts = []
+            ph = rnd.uniform(0, 6.28)
+            for k in range(73):
+                a = k / 72 * 2 * math.pi
+                rr = r * (1 + 0.12 * math.sin(3 * a + ph) + 0.05 * math.sin(7 * a + ph * 2))
+                pts.append((cx + rr * math.cos(a), cy + rr * 0.8 * math.sin(a)))
+            d.line(pts, fill=(160, 200, 170, 14), width=2)
+    img.alpha_composite(lay)
+    return noise_overlay(img.convert("RGB"), 4, seed)
+
+
+CARD = (54, 120, W - 54, 1800)
+
+
+def card_layer(seed):
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    x0, y0, x1, y1 = CARD
+    ImageDraw.Draw(sh).rounded_rectangle([x0 + 8, y0 + 18, x1 + 8, y1 + 18], 30, fill=(0, 0, 0, 140))
+    sh = sh.filter(ImageFilter.GaussianBlur(16))
+    paper = noise_overlay(vgrad(x1 - x0, y1 - y0, CREAM, (232, 222, 196)), 6, seed)
+    mask = Image.new("L", paper.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, paper.size[0] - 1, paper.size[1] - 1], 30, fill=255)
+    lay.paste(paper, (x0, y0), mask)
+    d = ImageDraw.Draw(lay)
+    d.rounded_rectangle([x0 + 22, y0 + 22, x1 - 22, y1 - 22], 20, outline=MOSS, width=3)
+    d.rounded_rectangle([x0 + 32, y0 + 32, x1 - 32, y1 - 32], 16, outline=MOSS + (90,), width=1)
+    return Image.alpha_composite(sh, lay)
+
+
+def draw_toque(size=300, main=(196, 44, 52), band=(240, 232, 214), stripe=(28, 44, 78)):
+    """Original illustration: knit winter hat with pom-pom (drawn 3x then downsampled)."""
+    S = size * 3
+    im = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    cx = S // 2
+    # dome
+    d.chord([S * 0.16, S * 0.26, S * 0.84, S * 1.02], 180, 360, fill=main)
+    # knit ribs on dome
+    for k in range(-4, 5):
+        x = cx + k * S * 0.07
+        d.line([(x, S * 0.64), (cx + k * S * 0.03, S * 0.33)], fill=tuple(int(c * 0.82) for c in main), width=int(S * 0.012))
+    # stripe across dome
+    d.rectangle([S * 0.17, S * 0.52, S * 0.83, S * 0.58], fill=stripe)
+    # cuff
+    d.rounded_rectangle([S * 0.12, S * 0.62, S * 0.88, S * 0.80], int(S * 0.04), fill=band)
+    for k in range(17):
+        x = S * 0.15 + k * S * 0.043
+        d.line([(x, S * 0.64), (x, S * 0.78)], fill=(205, 194, 170), width=int(S * 0.01))
+    # pom-pom with fuzz
+    rnd = random.Random(4)
+    pr = S * 0.13
+    py = S * 0.22
+    d.ellipse([cx - pr, py - pr, cx + pr, py + pr], fill=band)
+    for _ in range(140):
+        a = rnd.uniform(0, 6.28); r = rnd.uniform(pr * 0.6, pr * 1.08); rr = S * 0.012
+        x, y = cx + r * math.cos(a), py + r * math.sin(a)
+        d.ellipse([x - rr, y - rr, x + rr, y + rr], fill=rnd.choice([band, (225, 214, 190), (250, 246, 236)]))
+    return im.resize((size, size), Image.LANCZOS)
+
+
+def render_field(spec, t, bg, card, icon):
+    img = bg.copy().convert("RGBA")
+    img.alpha_composite(card)
+    d = ImageDraw.Draw(img)
+    x0, y0, x1, y1 = CARD
+    cx = W // 2
+    a = ease((t - COVER_SECS) / 0.5)
+    draw_text_alpha(img, (cx, y0 + 62), spec["kicker"], font(INTER_B, 34), RED, a, anchor="ma")
+    # icon plate
+    py = y0 + 270
+    ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(ov)
+    od.ellipse([cx - 150, py - 150, cx + 150, py + 150], fill=(214, 224, 200, int(255 * a)), outline=MOSS + (int(255 * a),), width=4)
+    for k in range(48):
+        ang = k / 48 * 2 * math.pi
+        rx, ry = cx + 166 * math.cos(ang), py + 166 * math.sin(ang)
+        od.ellipse([rx - 3, ry - 3, rx + 3, ry + 3], fill=MOSS + (int(200 * a),))
+    img.alpha_composite(ov)
+    bob = int(6 * math.sin(t * 2.2))
+    ic = icon.copy()
+    if a < 1:
+        ic.putalpha(ic.getchannel("A").point(lambda v: int(v * a)))
+    img.alpha_composite(ic, (cx - icon.size[0] // 2, py - icon.size[1] // 2 + 10 + bob))
+    # name
+    names = spec["head"]
+    size = fit_size(ANTON, names, x1 - x0 - 140, 104, 70)
+    y = py + 190
+    for s_ in names:
+        draw_text_alpha(img, (cx, y), s_, font(ANTON, size), INK, a, anchor="ma")
+        y += int(size * 1.02)
+    draw_text_alpha(img, (cx, y + 24), spec["latin"], font(INTER_I, 38), MOSS, a, anchor="ma")
+    y += 96
+    d = ImageDraw.Draw(img)
+    d.line([(x0 + 90, y), (x1 - 90, y)], fill=MOSS, width=2)
+    y += 34
+    # entries
+    t0, step = spec["first"], spec["step"]
+    ents = spec["entries"]
+    end_t = t0 + len(ents) * step
+    fade = 1.0 if t < end_t else 1 - ease((t - end_t) / 0.5)  # entries clear for the FIELD NOTE
+    tf = font(INTER_SB, 42)
+    for i, e in enumerate(ents):
+        ti = t0 + i * step
+        if t < ti:
+            continue
+        aa = ease((t - ti) / 0.45) * fade
+        draw_text_alpha(img, (x0 + 90, y), e["label"], font(INTER_B, 28), RED, aa, dy=int(12 * (1 - aa)))
+        yy = y + 42
+        for ln in wrap(tf, e["text"], x1 - x0 - 180):
+            draw_text_alpha(img, (x0 + 90, yy), ln, tf, INK, aa, dy=int(12 * (1 - aa)))
+            yy += 54
+        y = yy + 22
+    # field note stamp
+    if t >= end_t:
+        a2 = ease((t - end_t) / 0.5)
+        box_top = 1180
+        ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        od = ImageDraw.Draw(ov)
+        od.rounded_rectangle([x0 + 60, box_top, x1 - 60, box_top + 330], 22, fill=(30, 52, 42, int(240 * a2)), outline=RED + (int(255 * a2),), width=5)
+        img.alpha_composite(ov)
+        draw_text_alpha(img, (x0 + 100, box_top + 36), "FIELD NOTE", font(INTER_B, 32), (255, 120, 110), a2)
+        f = font(INTER_B, 48)
+        yy = box_top + 90
+        for ln in wrap(f, spec["end"], x1 - x0 - 200):
+            draw_text_alpha(img, (x0 + 100, yy), ln, f, WHITE, a2, dy=int(12 * (1 - a2)))
+            yy += 62
+        a3 = ease((t - end_t - 1.2) / 0.6)
+        draw_text_alpha(img, (cx, y1 - 110), spec["follow"], font(INTER_B, 38), RED, a3, anchor="ma")
+    return img
+
+
+def field_cues(spec):
+    t0, step = spec["first"], spec["step"]; ents = spec["entries"]
+    end_t = t0 + len(ents) * step
+    cues = [(0.3, t0 - 0.05, "Rink Field Guide. " + " ".join(spec["head"]).title() + ".")]
+    for i, e in enumerate(ents):
+        cues.append((t0 + i * step, t0 + (i + 1) * step, e["label"].title() + ": " + e["text"]))
+    cues.append((end_t, spec["duration"] - 0.1, "Field note: " + spec["end"]))
+    return cues, end_t
+
+
 # ---------------------------------------------------------------- driver
 def build(spec, outdir):
     name = spec["name"]
@@ -441,6 +601,11 @@ def build(spec, outdir):
         render = lambda t: render_split(spec, t, bg)
         cues, end_t = split_cues(spec)
         cov = cover_card(bg, spec["kicker"], spec["head"], spec.get("cover_sub"), scolor=(225, 225, 235), panel=(6, 6, 10, 200))
+    elif kind == "fieldguide":
+        bg = field_bg(seed); card = card_layer(seed); icon = draw_toque(250)
+        render = lambda t: render_field(spec, t, bg, card, icon)
+        cues, end_t = field_cues(spec)
+        cov = cover_card(bg, spec["kicker"], spec["head"], spec.get("cover_sub"), kcolor=(255, 120, 110), scolor=(220, 230, 210), panel=(6, 18, 14, 170))
     else:
         raise SystemExit("unknown layout " + kind)
     cues.append((end_t + 1.2, dur, spec["follow"]))
@@ -455,7 +620,7 @@ def build(spec, outdir):
     wav = f"/tmp/{name}.wav"
     m = spec.get("music", {})
     make_music(wav, dur, bpm=m.get("bpm", 78), seed=m.get("seed", seed), prog=m.get("prog", "am_f_c_g"),
-               drums=m.get("drums", True), arp_density=m.get("arp_density", 0.85))
+               drums=m.get("drums", True), arp_density=m.get("arp_density", 0.85), lead=m.get("lead", "keys"))
     out = os.path.join(outdir, name + ".mp4")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(FPS), "-i", f"{tmp}/%05d.png", "-i", wav,
                     "-c:v", "libx264", "-preset", "veryfast", "-crf", "19", "-pix_fmt", "yuv420p",

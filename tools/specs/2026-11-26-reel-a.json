@@ -1,0 +1,22 @@
+{
+ "name": "reel-a-field-guide-tournament-grandparent",
+ "layout": "fieldguide",
+ "seed": 91,
+ "duration": 21,
+ "first": 1.5,
+ "step": 2.6,
+ "kicker": "RINK FIELD GUIDE  ·  NO. 1",
+ "head": ["THE TOURNAMENT", "GRANDPARENT"],
+ "latin": "Grandparens bleacherus",
+ "cover_sub": "Seen at every Thanksgiving tournament.",
+ "entries": [
+  {"label": "HABITAT", "text": "Top row of the bleachers, under a blanket older than the coach."},
+  {"label": "CALL", "text": "\"Which one is ours again?\""},
+  {"label": "DIET", "text": "Rink hot chocolate. Crackers from a purse that holds everything."},
+  {"label": "HOW TO SPOT", "text": "Cheers for every save. Both goalies."},
+  {"label": "BEHAVIOR", "text": "Drove four hours. Up for the 7 AM game anyway."}
+ ],
+ "end": "Has never once left before the handshake line.",
+ "follow": "Follow for more from the rink.",
+ "music": {"bpm": 96, "seed": 91, "prog": "g_d_em_c", "lead": "pluck", "arp_density": 0.8}
+}

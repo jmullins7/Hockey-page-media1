@@ -1,5 +1,5 @@
 {
- "season_to_date": 6400.4,
+ "season_to_date": 6658.39,
  "how_set": "Started 2026-11-25 at $6,214.37 as a believable Aug-Nov travel hockey season-to-date (club dues installments, ~4 tournaments with hotels/gas, extra ice and skills sessions, gear). Each Season Ledger episode adds its receipt total exactly.",
  "episodes": [
   {
@@ -8,6 +8,13 @@
    "total": 186.03,
    "prev": 6214.37,
    "new": 6400.4
+  },
+  {
+   "date": "2026-11-26",
+   "title": "Ep. 2: Thanksgiving Day",
+   "total": 257.99,
+   "prev": 6400.4,
+   "new": 6658.39
   }
  ]
 }

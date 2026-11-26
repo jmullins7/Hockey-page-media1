@@ -1,0 +1,30 @@
+{
+ "name": "reel-c-season-ledger-ep2-thanksgiving-day",
+ "layout": "receipt",
+ "seed": 111,
+ "duration": 23,
+ "first": 1.5,
+ "step": 1.6,
+ "hold": 2.8,
+ "kicker": "THE SEASON LEDGER  ·  EP. 2",
+ "head": ["THANKSGIVING.", "$257.99."],
+ "cover_sub": "One tournament day. Every dollar.",
+ "episode": "EP. 2  ·  THANKSGIVING DAY",
+ "sub_label": "TODAY",
+ "items": [
+  {"label": "Rink parking", "price": "$10.00", "amt": 10.00, "cap": "Rink parking. $10.00"},
+  {"label": "Concession coffee x2", "price": "$7.50", "amt": 7.50, "cap": "Concession coffee, two of them. $7.50"},
+  {"label": "Tournament program", "price": "$5.00", "amt": 5.00, "cap": "Tournament program. $5.00"},
+  {"label": "Rink \"turkey dinner\"", "price": "$12.49", "amt": 12.49, "cap": "The rink's turkey dinner. A sandwich. $12.49"},
+  {"label": "Bake sale pie slices", "price": "$8.00", "amt": 8.00, "cap": "Bake sale pie slices. $8.00"},
+  {"label": "Coach gift, our share", "price": "$20.00", "amt": 20.00, "cap": "Coach gift, our share. $20.00"},
+  {"label": "Hotel, night 1 of 2", "price": "$189.00", "amt": 189.00, "cap": "Hotel, night one of two. $189.00"},
+  {"label": "Hotel laundry, gear", "price": "$6.00", "amt": 6.00, "cap": "Hotel laundry for the gear. $6.00"}
+ ],
+ "today_total": 257.99,
+ "prev_std": 6400.40,
+ "new_std": 6658.39,
+ "end": "Worth every cent. Ask me again when the statement comes.",
+ "follow": "Follow for more from the rink.",
+ "music": {"bpm": 88, "seed": 111, "prog": "bb_f_gm_eb"}
+}

@@ -92,6 +92,9 @@ def _note(f, dur, sr=SR, kind="keys"):
     if kind == "keys":
         sig = (np.sin(2 * np.pi * f * t) + 0.35 * np.sin(4 * np.pi * f * t) + 0.12 * np.sin(6 * np.pi * f * t))
         env = np.exp(-t * 2.2) * (1 - np.exp(-t * 200))
+    elif kind == "pluck":  # added 2026-11-26: brighter, shorter, guitar-ish
+        sig = sum((0.6 ** h) * np.sin(2 * np.pi * f * (h + 1) * t) * np.exp(-t * (3 + 4 * h)) for h in range(5))
+        env = (1 - np.exp(-t * 400))
     else:  # pad
         sig = sum(np.sin(2 * np.pi * f * (1 + dt) * t) for dt in (-0.003, 0, 0.004)) / 3
         a = np.minimum(1, t / 0.6)
@@ -110,10 +113,14 @@ PROGS = {
     "dm_bb_f_c": [[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]],
     "c_g_am_f": [[48, 52, 55], [55, 59, 62], [57, 60, 64], [53, 57, 60]],
     "em_c_g_d": [[52, 55, 59], [48, 52, 55], [55, 59, 62], [50, 54, 57]],
+    # added 2026-11-26
+    "g_d_em_c": [[55, 59, 62], [50, 54, 57], [52, 55, 59], [48, 52, 55]],
+    "bb_f_gm_eb": [[46, 50, 53], [53, 57, 60], [55, 58, 62], [51, 55, 58]],
+    "am_em_f_g": [[57, 60, 64], [52, 55, 59], [53, 57, 60], [55, 59, 62]],
 }
 
 
-def make_music(path, seconds, bpm=78, seed=1, prog="am_f_c_g", drums=True, arp_density=0.85):
+def make_music(path, seconds, bpm=78, seed=1, prog="am_f_c_g", drums=True, arp_density=0.85, lead="keys"):
     """Original warm lo-fi bed: pad + keys arpeggio + soft kick/hat. prog picks the chord loop."""
     rnd = np.random.default_rng(seed)
     n = int(seconds * SR)
@@ -135,7 +142,7 @@ def make_music(path, seconds, bpm=78, seed=1, prog="am_f_c_g", drums=True, arp_d
             if rnd.random() > arp_density:
                 continue
             si = s0 + int(i * beat / 2 * SR)
-            k = _note(midi(m), 1.2) * 0.07
+            k = _note(midi(m), 1.2, kind=lead) * (0.09 if lead == "pluck" else 0.07)
             out[si:si + len(k)] += k[: max(0, len(out) - si)]
         for q in range(4 if drums else 0):
             si = s0 + int(q * beat * SR)

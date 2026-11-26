@@ -1,0 +1,26 @@
+{
+ "name": "reel-b-4am-club-black-friday",
+ "layout": "dashboard",
+ "seed": 101,
+ "duration": 22,
+ "first": 1.5,
+ "step": 2.4,
+ "kicker": "4 AM CLUB",
+ "title_small": "BLACK FRIDAY",
+ "head": ["BLACK FRIDAY.", "4:41 AM."],
+ "cover_sub": "Everybody's up early. Different lines.",
+ "start_clock": "4:41",
+ "end_clock": "5:58",
+ "temp": "22°F",
+ "items": [
+  {"time": "4:41", "label": "Up before the alarm.", "sub": "Turkey coma lost to habit.", "cap": "Up before the alarm. Turkey coma lost to habit."},
+  {"time": "4:46", "label": "Pie for breakfast.", "sub": "It's got fruit in it. Mostly.", "cap": "Pie for breakfast. It's got fruit in it. Mostly."},
+  {"time": "4:53", "label": "Hotel lobby coffee.", "sub": "Pot's empty. Hockey parents.", "cap": "Hotel lobby coffee. Pot's already empty. Hockey parents."},
+  {"time": "5:04", "label": "Store lot across the road.", "sub": "Already full. Doors at five.", "cap": "The store lot across the road is already full. Doors opened at five."},
+  {"time": "5:11", "label": "Kid asleep in the back.", "sub": "Gear bag for a pillow.", "cap": "Kid's asleep in the back. Gear bag for a pillow."},
+  {"time": "5:36", "label": "Rink lot. Full too.", "sub": "Different line. Same coffee.", "cap": "Rink lot. Full too. Different line. Same coffee."}
+ ],
+ "end": "They're up for doorbusters. We're up for a 6:15 puck drop.",
+ "follow": "Follow for more from the rink.",
+ "music": {"bpm": 64, "seed": 101, "prog": "am_em_f_g", "drums": false, "arp_density": 0.65}
+}
