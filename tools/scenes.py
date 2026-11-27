@@ -7,6 +7,11 @@ Each series gets its own look instead of the shared navy page:
                each timestamp, log of the morning stacking above.
   split     -> Debate Night: two-column split (red vs blue), points land alternately.
   fieldguide-> Rink Field Guide: cream naturalist card on topo-green, drawn icon, entries + FIELD NOTE stamp (2026-11-26).
+               spec "icon": toque | whistle (2026-11-27).
+  hotel     -> 4 AM Club, tournament-hotel edition: dark room, curtain light sliver, nightstand
+               seven-segment alarm clock ticking to each timestamp (2026-11-27).
+  scoreboard-> topical/parents' scoreboard: rink rafters + scoreboard, amber seven-segment
+               stat rows that light up one by one (2026-11-27).
 
 Usage: python3 scenes.py spec.json outdir
 Everything is drawn programmatically (PIL); music is original (lib.make_music).
@@ -576,6 +581,312 @@ def field_cues(spec):
     return cues, end_t
 
 
+# ---------------------------------------------------------------- SEVEN-SEGMENT digits (added 2026-11-27)
+# Shared primitive for the hotel alarm clock (4 AM Club, hotel edition) and the rink scoreboard.
+SEG = {  # segments a b c d e f g
+    "0": "abcdef", "1": "bc", "2": "abged", "3": "abgcd", "4": "fgbc", "5": "afgcd",
+    "6": "afgedc", "7": "abc", "8": "abcdefg", "9": "abcdfg", "-": "g", " ": "",
+}
+
+
+def seg_digit(d, x, y, w, h, ch, on, off=None, th=None):
+    """Draw one seven-segment digit with beveled hexagon segments; unlit segments drawn faintly."""
+    th = th or max(4, int(w * 0.2))
+    g = th * 0.5
+    lit = SEG.get(ch, "")
+    def hseg(cx0, cx1, cy):
+        return [(cx0 + g, cy), (cx0 + th, cy - g), (cx1 - th, cy - g), (cx1 - g, cy), (cx1 - th, cy + g), (cx0 + th, cy + g)]
+    def vseg(cx, cy0, cy1):
+        return [(cx, cy0 + g), (cx + g, cy0 + th), (cx + g, cy1 - th), (cx, cy1 - g), (cx - g, cy1 - th), (cx - g, cy0 + th)]
+    mid = y + h / 2
+    shapes = {
+        "a": hseg(x, x + w, y + g), "g": hseg(x, x + w, mid), "d": hseg(x, x + w, y + h - g),
+        "f": vseg(x + g, y + g, mid), "b": vseg(x + w - g, y + g, mid),
+        "e": vseg(x + g, mid, y + h - g), "c": vseg(x + w - g, mid, y + h - g),
+    }
+    for k, poly in shapes.items():
+        if k in lit:
+            d.polygon(poly, fill=on)
+        elif off:
+            d.polygon(poly, fill=off)
+
+
+def seg_text(img, x, y, s, h, on, off=None, glow=10, colon_on=True, anchor="l"):
+    """Draw a string of digits/colon in seven-segment style with glow. Returns width."""
+    w = int(h * 0.5); gap = int(h * 0.16); cw = int(h * 0.22)
+    total = sum(cw if c == ":" else w + gap for c in s) - gap
+    if anchor == "m":
+        x = x - total // 2
+    elif anchor == "r":
+        x = x - total
+    lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    offl = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    do = ImageDraw.Draw(offl)
+    cx = x
+    for c in s:
+        if c == ":":
+            r = max(3, int(h * 0.05))
+            for yy in (y + h * 0.3, y + h * 0.7):
+                (d if colon_on else do).ellipse([cx + cw / 2 - r, yy - r, cx + cw / 2 + r, yy + r], fill=on if colon_on else (off or (0, 0, 0, 0)))
+            cx += cw
+            continue
+        seg_digit(d, cx, y, w, h, c, on)
+        if off:
+            seg_digit(do, cx, y, w, h, "8", off)
+        cx += w + gap
+    if off:
+        img.alpha_composite(offl)
+    if glow:
+        img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(glow)))
+    img.alpha_composite(lay)
+    return total
+
+
+# ---------------------------------------------------------------- HOTEL (4 AM Club, tournament-hotel edition) — added 2026-11-27
+def hotel_bg(seed):
+    """Dark hotel room: blackout curtain with a sliver of parking-lot light, headboard, nightstand."""
+    img = vgrad(W, H, (14, 14, 22), (6, 6, 10)).convert("RGBA")
+    d = ImageDraw.Draw(img)
+    # curtain folds
+    for k in range(14):
+        x = k * (W / 13)
+        shade = 18 + int(8 * math.sin(k * 1.7))
+        d.rectangle([x, 0, x + W / 13, 1060], fill=(shade, shade + 2, shade + 10))
+    # light sliver between curtains (parking-lot sodium lamp)
+    sl = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(sl).polygon([(770, 0), (800, 0), (840, 1060), (790, 1060)], fill=(255, 176, 90, 120))
+    img.alpha_composite(sl.filter(ImageFilter.GaussianBlur(14)))
+    # floor spill of that light
+    sp = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(sp).polygon([(790, 1060), (840, 1060), (1080, 1500), (900, 1500)], fill=(255, 170, 90, 26))
+    img.alpha_composite(sp.filter(ImageFilter.GaussianBlur(30)))
+    # headboard + bed edge on left
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([-80, 980, 520, 1260], 30, fill=(30, 24, 26))
+    d.rectangle([-80, 1240, 560, H], fill=(54, 54, 64))
+    d.rectangle([-80, 1240, 560, 1262], fill=(78, 78, 90))
+    # nightstand
+    d.rectangle([560, 1360, W, H], fill=(44, 32, 26))
+    d.rectangle([560, 1360, W, 1384], fill=(64, 48, 38))
+    d.line([(600, 1560), (W, 1560)], fill=(30, 22, 18), width=4)
+    d.ellipse([800, 1620, 840, 1660], fill=(90, 72, 52))
+    # gear bag silhouette on floor bottom-left
+    d.rounded_rectangle([-40, 1600, 470, 1880], 60, fill=(20, 22, 30))
+    d.line([(40, 1640), (400, 1640)], fill=(36, 40, 54), width=6)
+    return noise_overlay(img.convert("RGB"), 5, seed)
+
+
+CLOCK_BOX = (600, 1180, 1040, 1370)
+
+
+def hotel_layer():
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    x0, y0, x1, y1 = CLOCK_BOX
+    d.rounded_rectangle([x0, y0, x1, y1], 34, fill=(22, 22, 26, 255), outline=(52, 52, 60, 255), width=3)
+    d.rounded_rectangle([x0 + 30, y0 + 28, x1 - 30, y1 - 44], 14, fill=(8, 3, 4, 255))
+    d.text(((x0 + x1) // 2, y1 - 38), "AM  ·  ALARM  ·  SNOOZE", font=font(INTER_B, 18), fill=(110, 110, 120, 255), anchor="ma")
+    return lay
+
+
+CLOCK_RED = (255, 52, 40, 255)
+
+
+def render_hotel(spec, t, bg, lay):
+    img = bg.copy().convert("RGBA")
+    img.alpha_composite(lay)
+    items = spec["items"]; t0, step = spec["first"], spec["step"]; n = len(items)
+    end_t = t0 + n * step
+    cur = None
+    for i in range(n):
+        if t >= t0 + i * step:
+            cur = i
+    clock = items[cur]["time"] if cur is not None else spec["start_clock"]
+    if t >= end_t and spec.get("end_clock"):
+        clock = spec["end_clock"]
+    clock = clock.rjust(5)
+    x0, y0, x1, y1 = CLOCK_BOX
+    seg_text(img, (x0 + x1) // 2, y0 + 50, clock, 92, CLOCK_RED, off=(60, 10, 10, 255), glow=12,
+             colon_on=(t % 1.0) < 0.5, anchor="m")
+    # red clock glow spilling onto the wall
+    gl = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(gl).ellipse([x0 - 60, y0 - 160, x1 + 60, y0 + 60], fill=(255, 40, 30, 22))
+    img.alpha_composite(gl.filter(ImageFilter.GaussianBlur(50)))
+    a = ease((t - COVER_SECS) / 0.5)
+    draw_text_alpha(img, (X, 110), spec["kicker"], font(INTER_B, 36), (255, 110, 100), a)
+    draw_text_alpha(img, (X, 160), spec["title_small"], font(ANTON, 88), WHITE, a)
+    # log on a dark translucent panel
+    y = 330
+    for i, it in enumerate(items):
+        ti = t0 + i * step
+        if t < ti:
+            continue
+        aa = ease((t - ti) / 0.4)
+        latest = (i == cur) and t < end_t
+        dim = 1.0 if latest else 0.55
+        if t >= end_t:
+            dim = 0.3
+        draw_text_alpha(img, (X, y + 4), it["time"], font(MONO_M, 44), (255, 90, 80) if latest else (170, 150, 150), aa * dim, dy=int(14 * (1 - aa)))
+        draw_text_alpha(img, (X + 160, y), it["label"], font(INTER_B, 48), WHITE, aa * dim, dy=int(14 * (1 - aa)))
+        if it.get("sub"):
+            draw_text_alpha(img, (X + 160, y + 60), it["sub"], font(INTER_M, 36), (190, 186, 196), aa * dim, dy=int(14 * (1 - aa)))
+        y += 112
+    if t >= end_t:
+        a = ease((t - end_t) / 0.6)
+        ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        top = 1420  # below the nightstand clock so the final time stays visible
+        ImageDraw.Draw(ov).rounded_rectangle([60, top, W - 60, top + 230], 28, fill=(10, 6, 8, int(230 * a)), outline=(255, 52, 40, int(200 * a)), width=3)
+        img.alpha_composite(ov)
+        f = font(INTER_B, 50)
+        yy = top + 36
+        for ln in wrap(f, spec["end"], W - 2 * X - 30):
+            draw_text_alpha(img, (X, yy), ln, f, WHITE, a, dy=int(16 * (1 - a)))
+            yy += 64
+        a2 = ease((t - end_t - 1.2) / 0.6)
+        draw_text_alpha(img, (W // 2, 1700), spec["follow"], font(INTER_B, 38), (255, 120, 110), a2, anchor="ma")
+    return img
+
+
+# ---------------------------------------------------------------- SCOREBOARD (topical / parents' scoreboard) — added 2026-11-27
+AMBER = (255, 178, 40, 255)
+
+
+def board_bg(seed):
+    """Rink rafters at night: dark steel truss lines, hanging lights."""
+    img = vgrad(W, H, (12, 16, 24), (24, 30, 40)).convert("RGBA")
+    d = ImageDraw.Draw(img)
+    for k in range(-2, 12):
+        x = k * 110
+        d.line([(x, 0), (x + 220, 260)], fill=(34, 40, 52), width=6)
+        d.line([(x + 220, 0), (x, 260)], fill=(34, 40, 52), width=6)
+    d.line([(0, 4), (W, 4)], fill=(40, 46, 58), width=10)
+    d.line([(0, 258), (W, 258)], fill=(40, 46, 58), width=10)
+    gl = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(gl)
+    for lx in (140, 940):
+        gd.ellipse([lx - 70, 230, lx + 70, 300], fill=(255, 250, 230, 150))
+    img.alpha_composite(gl.filter(ImageFilter.GaussianBlur(26)))
+    d = ImageDraw.Draw(img)
+    for lx in (140, 940):
+        d.line([(lx, 258), (lx, 262)], fill=(60, 60, 70), width=4)
+        d.rounded_rectangle([lx - 36, 258, lx + 36, 276], 6, fill=(240, 240, 230))
+    # glass + boards at the bottom
+    d.rectangle([0, 1700, W, H], fill=(230, 232, 236))
+    d.rectangle([0, 1700, W, 1722], fill=(250, 210, 40))
+    d.rectangle([0, 1880, W, H], fill=(226, 54, 66))
+    return noise_overlay(img.convert("RGB"), 4, seed)
+
+
+BOARD = (50, 330, W - 50, 1660)
+
+
+def board_layer(spec):
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    x0, y0, x1, y1 = BOARD
+    sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rounded_rectangle([x0 + 10, y0 + 20, x1 + 10, y1 + 20], 26, fill=(0, 0, 0, 160))
+    lay.alpha_composite(sh.filter(ImageFilter.GaussianBlur(18)))
+    d = ImageDraw.Draw(lay)
+    d.rounded_rectangle([x0, y0, x1, y1], 26, fill=(18, 18, 20, 255), outline=(70, 70, 78, 255), width=6)
+    d.rounded_rectangle([x0 + 18, y0 + 18, x1 - 18, y1 - 18], 18, outline=(46, 46, 52, 255), width=2)
+    # top band: HOME  PERIOD  GUEST
+    d.text((x0 + 160, y0 + 44), "HOME", font=font(INTER_B, 40), fill=(240, 240, 240, 255), anchor="ma")
+    d.text((x1 - 160, y0 + 44), "GUEST", font=font(INTER_B, 40), fill=(240, 240, 240, 255), anchor="ma")
+    d.text((W // 2, y0 + 44), "PERIOD", font=font(INTER_B, 30), fill=(180, 180, 186, 255), anchor="ma")
+    d.line([(x0 + 40, y0 + 270), (x1 - 40, y0 + 270)], fill=(60, 60, 66, 255), width=3)
+    return lay
+
+
+def render_board(spec, t, bg, lay):
+    img = bg.copy().convert("RGBA")
+    img.alpha_composite(lay)
+    x0, y0, x1, y1 = BOARD
+    a = ease((t - COVER_SECS) / 0.5)
+    draw_text_alpha(img, (W // 2, 120), spec["kicker"], font(INTER_B, 36), (255, 190, 80), a, anchor="ma")
+    draw_text_alpha(img, (W // 2, 170), spec["title_small"], font(ANTON, 96), WHITE, a, anchor="ma")
+    hs, gs, per = spec["score"]
+    off = (44, 30, 8, 255)
+    seg_text(img, x0 + 160, y0 + 110, hs, 130, (255, 60, 50, 255), off=off, glow=10, anchor="m")
+    seg_text(img, x1 - 160, y0 + 110, gs, 130, (255, 60, 50, 255), off=off, glow=10, anchor="m")
+    seg_text(img, W // 2, y0 + 110, per, 100, AMBER, off=off, glow=8, anchor="m")
+    t0, step = spec["first"], spec["step"]
+    rows = spec["rows"]
+    end_t = t0 + len(rows) * step
+    y = y0 + 320
+    for i, r in enumerate(rows):
+        ti = t0 + i * step
+        lit = t >= ti
+        aa = ease((t - ti) / 0.35) if lit else 0
+        # label always printed on the board (like painted lettering), brighter once lit
+        lf = font(INTER_B, 42)
+        lines = wrap(lf, r["label"], 600)
+        ly = y + (110 - len(lines) * 50) // 2
+        for ln in lines:
+            ImageDraw.Draw(img).text((x0 + 60, ly), ln, font=lf, fill=(110, 110, 118) if not lit else (236, 236, 240))
+            ly += 50
+        if lit:
+            # flicker on: digits pop in with a brief overshoot of brightness
+            col = AMBER if aa >= 1 else (255, 220, 120, 255)
+            seg_text(img, x1 - 70, y + 4, r["value"], 104, col, off=off, glow=8, anchor="r")
+        else:
+            seg_text(img, x1 - 70, y + 4, " " * len(r["value"]), 104, AMBER, off=off, glow=0, anchor="r")
+        y += 196
+    if t >= end_t:
+        a2 = ease((t - end_t) / 0.6)
+        ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        top = y0 + 300
+        ImageDraw.Draw(ov).rounded_rectangle([x0 + 30, top, x1 - 30, y1 - 30], 20, fill=(10, 10, 12, int(250 * a2)))
+        img.alpha_composite(ov)
+        f = font(INTER_B, 54)
+        lines = wrap(f, spec["end"], x1 - x0 - 140)
+        yy = (top + y1 - 30) // 2 - (len(lines) * 70 + 100) // 2
+        for ln in lines:
+            draw_text_alpha(img, (W // 2, yy), ln, f, WHITE, a2, dy=int(16 * (1 - a2)), anchor="ma")
+            yy += 70
+        a3 = ease((t - end_t - 1.2) / 0.6)
+        draw_text_alpha(img, (W // 2, yy + 60), spec["follow"], font(INTER_B, 38), (255, 190, 80), a3, anchor="ma")
+    return img
+
+
+def board_cues(spec):
+    t0, step = spec["first"], spec["step"]; rows = spec["rows"]
+    end_t = t0 + len(rows) * step
+    cues = [(0.3, t0 - 0.05, " ".join(spec["head"]).capitalize())]
+    for i, r in enumerate(rows):
+        cues.append((t0 + i * step, t0 + (i + 1) * step, r["label"].capitalize() + ": " + r["value"].strip()))
+    cues.append((end_t, spec["duration"] - 0.1, spec["end"]))
+    return cues, end_t
+
+
+# ---------------------------------------------------------------- extra field-guide icon (added 2026-11-27)
+def draw_whistle(size=260, body=(200, 206, 214), dark=(70, 76, 88), cord=(196, 44, 52)):
+    """Original illustration: coach's whistle on a lanyard (drawn 3x, downsampled)."""
+    S = size * 3
+    im = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    # barrel
+    cx, cy, r = S * 0.42, S * 0.64, S * 0.24
+    # lanyard loop hanging up from the ring (ring sits at the bottom of the loop)
+    rx, ry = cx - r * 0.9, cy - r * 0.85
+    d.ellipse([rx - S * 0.15, S * 0.04, rx + S * 0.15, ry], outline=cord, width=int(S * 0.032))
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=body, outline=dark, width=int(S * 0.018))
+    # mouthpiece
+    d.rounded_rectangle([cx + r * 0.2, cy - r, S * 0.95, cy - r * 0.15], int(S * 0.03), fill=body, outline=dark, width=int(S * 0.018))
+    d.rectangle([cx + r * 0.25, cy - r * 0.95, cx + r * 0.9, cy - r * 0.2], fill=body)
+    # sound hole
+    d.rectangle([cx + r * 0.35, cy - r * 0.95, cx + r * 0.7, cy - r * 0.7], fill=dark)
+    # ring
+    d.ellipse([cx - r * 1.15, cy - r * 1.1, cx - r * 0.65, cy - r * 0.6], outline=dark, width=int(S * 0.02))
+    # highlight
+    d.arc([cx - r * 0.7, cy - r * 0.7, cx + r * 0.7, cy + r * 0.7], 200, 260, fill=(250, 252, 255), width=int(S * 0.02))
+    return im.resize((size, size), Image.LANCZOS)
+
+
+ICONS = {"toque": draw_toque, "whistle": draw_whistle}
+
+
 # ---------------------------------------------------------------- driver
 def build(spec, outdir):
     name = spec["name"]
@@ -602,10 +913,23 @@ def build(spec, outdir):
         cues, end_t = split_cues(spec)
         cov = cover_card(bg, spec["kicker"], spec["head"], spec.get("cover_sub"), scolor=(225, 225, 235), panel=(6, 6, 10, 200))
     elif kind == "fieldguide":
-        bg = field_bg(seed); card = card_layer(seed); icon = draw_toque(250)
+        bg = field_bg(seed); card = card_layer(seed); icon = ICONS[spec.get("icon", "toque")](250)
         render = lambda t: render_field(spec, t, bg, card, icon)
         cues, end_t = field_cues(spec)
         cov = cover_card(bg, spec["kicker"], spec["head"], spec.get("cover_sub"), kcolor=(255, 120, 110), scolor=(220, 230, 210), panel=(6, 18, 14, 170))
+    elif kind == "hotel":
+        bg = hotel_bg(seed); lay = hotel_layer()
+        render = lambda t: render_hotel(spec, t, bg, lay)
+        cues, end_t = dash_cues(spec)
+        base = bg.copy().convert("RGBA"); base.alpha_composite(lay)
+        x0, y0, x1, y1 = CLOCK_BOX
+        seg_text(base, (x0 + x1) // 2, y0 + 50, spec["start_clock"].rjust(5), 92, CLOCK_RED, off=(60, 10, 10, 255), glow=12, anchor="m")
+        cov = cover_card(base.convert("RGB"), spec["kicker"], spec["head"], spec.get("cover_sub"), kcolor=(255, 110, 100), panel=(6, 4, 6, 200))
+    elif kind == "scoreboard":
+        bg = board_bg(seed); lay = board_layer(spec)
+        render = lambda t: render_board(spec, t, bg, lay)
+        cues, end_t = board_cues(spec)
+        cov = cover_card(render_board(spec, COVER_SECS, bg, lay).convert("RGB"), spec["kicker"], spec["head"], spec.get("cover_sub"), kcolor=(255, 190, 80), panel=(8, 8, 10, 215))
     else:
         raise SystemExit("unknown layout " + kind)
     cues.append((end_t + 1.2, dur, spec["follow"]))

@@ -1,0 +1,23 @@
+{
+ "name": "reel-a-field-guide-parking-lot-coach",
+ "layout": "fieldguide",
+ "icon": "whistle",
+ "seed": 113,
+ "duration": 21,
+ "first": 1.5,
+ "step": 2.6,
+ "kicker": "RINK FIELD GUIDE  ·  NO. 2",
+ "head": ["THE PARKING", "LOT COACH"],
+ "latin": "Coachus minivanicus",
+ "cover_sub": "Lives about forty feet from the rink door.",
+ "entries": [
+  {"label": "HABITAT", "text": "Driver's seat. Engine running. Before and after every game."},
+  {"label": "CALL", "text": "\"Did you see what I saw on that backcheck?\""},
+  {"label": "DIET", "text": "Gas station coffee. Half a granola bar from the console."},
+  {"label": "HOW TO SPOT", "text": "Only one in the car still talking."},
+  {"label": "BEHAVIOR", "text": "Means every word. Kid's asleep by the second light."}
+ ],
+ "end": "Is usually me. Working on it.",
+ "follow": "Follow for more from the rink.",
+ "music": {"bpm": 92, "seed": 113, "prog": "d_a_bm_g", "lead": "pluck", "arp_density": 0.75}
+}

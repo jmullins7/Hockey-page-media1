@@ -1,0 +1,25 @@
+{
+ "name": "reel-b-4am-club-hotel-day-two",
+ "layout": "hotel",
+ "seed": 127,
+ "duration": 22,
+ "first": 1.5,
+ "step": 2.4,
+ "kicker": "4 AM CLUB  ·  HOTEL EDITION",
+ "title_small": "TOURNAMENT DAY 2",
+ "head": ["DAY 2. HOTEL.", "5:12 AM."],
+ "cover_sub": "Four people. One bathroom. One alarm clock.",
+ "start_clock": "5:12",
+ "end_clock": "6:02",
+ "items": [
+  {"time": "5:12", "label": "Hotel alarm clock.", "sub": "Phone died on the charger. Again.", "cap": "Hotel alarm clock. Phone died on the charger. Again."},
+  {"time": "5:15", "label": "Shower order decided.", "sub": "Kid first. I go last. Cold.", "cap": "Shower order decided. Kid first. I go last. Cold."},
+  {"time": "5:24", "label": "One shin guard missing.", "sub": "Found it in the tub.", "cap": "One shin guard missing. Found it in the tub."},
+  {"time": "5:31", "label": "Gear off the heater.", "sub": "Room smells like a locker.", "cap": "Gear off the heater. The room smells like a locker."},
+  {"time": "5:43", "label": "Breakfast opens at 6:30.", "sub": "Puck drops at 7. Granola bar.", "cap": "Breakfast opens at 6:30. Puck drops at 7. Granola bar."},
+  {"time": "5:58", "label": "Elevator. Six gear bags.", "sub": "Nobody says a word. We know.", "cap": "Elevator. Six gear bags. Nobody says a word. We all know."}
+ ],
+ "end": "$189 a night to sleep five hours next to a wet gear bag.",
+ "follow": "Follow for more from the rink.",
+ "music": {"bpm": 62, "seed": 127, "prog": "cm_ab_eb_bb", "drums": false, "arp_density": 0.6}
+}

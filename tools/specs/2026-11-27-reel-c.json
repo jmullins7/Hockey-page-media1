@@ -1,0 +1,23 @@
+{
+ "name": "reel-c-scoreboard-the-ref-is-15",
+ "layout": "scoreboard",
+ "seed": 139,
+ "duration": 20,
+ "first": 1.5,
+ "step": 2.5,
+ "kicker": "THE OTHER SCOREBOARD",
+ "title_small": "THE REF IS 15.",
+ "head": ["THE REF", "IS 15."],
+ "cover_sub": "The other scoreboard from today's game.",
+ "score": ["3", "4", "3"],
+ "rows": [
+  {"label": "PARENTS ON THE GLASS", "value": "11"},
+  {"label": "REFS ON THE ICE", "value": "2"},
+  {"label": "AGE OF THE YOUNG ONE", "value": "15"},
+  {"label": "CALLS HE MISSED", "value": "1"},
+  {"label": "THINGS YELLED AT HIM", "value": "23"}
+ ],
+ "end": "He skated off, then came back out for the next game. A lot of us wouldn't.",
+ "follow": "Follow for more from the rink.",
+ "music": {"bpm": 84, "seed": 139, "prog": "em_am_d_g", "lead": "keys", "arp_density": 0.7}
+}

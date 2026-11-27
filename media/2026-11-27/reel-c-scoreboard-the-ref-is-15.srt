@@ -1,0 +1,32 @@
+1
+00:00:00,300 --> 00:00:01,450
+The ref is 15.
+
+2
+00:00:01,500 --> 00:00:04,000
+Parents on the glass: 11
+
+3
+00:00:04,000 --> 00:00:06,500
+Refs on the ice: 2
+
+4
+00:00:06,500 --> 00:00:09,000
+Age of the young one: 15
+
+5
+00:00:09,000 --> 00:00:11,500
+Calls he missed: 1
+
+6
+00:00:11,500 --> 00:00:14,000
+Things yelled at him: 23
+
+7
+00:00:14,000 --> 00:00:19,900
+He skated off, then came back out for the next game. A lot of us wouldn't.
+
+8
+00:00:15,200 --> 00:00:20,000
+Follow for more from the rink.
+
