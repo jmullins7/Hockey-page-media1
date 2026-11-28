@@ -1,0 +1,55 @@
+{
+ "name": "reel-a-group-chat-bracket-math",
+ "layout": "groupchat",
+ "seed": 151,
+ "duration": 21,
+ "first": 1.5,
+ "step": 2.2,
+ "kicker": "THE TEAM GROUP CHAT",
+ "title_small": "BRACKET MATH",
+ "head": [
+  "10:47 PM.",
+  "BRACKET MATH."
+ ],
+ "cover_sub": "Night two of a holiday tournament.",
+ "group": "U12 Parents (Tourney)",
+ "members": "14 members",
+ "clock": "10:47",
+ "battery": 0.14,
+ "chip": "Fri 10:47 PM",
+ "messages": [
+  {
+   "from": "Team Manager",
+   "text": "OK. Win by 3 and we're in the semis."
+  },
+  {
+   "from": "Goalie Mom",
+   "text": "Unless the other game ties."
+  },
+  {
+   "from": "Team Manager",
+   "text": "Then it's goals against. Capped at 5. I think."
+  },
+  {
+   "from": "Trailer Dad",
+   "text": "I made a spreadsheet."
+  },
+  {
+   "from": "Me",
+   "text": "Checkout is 11. Semis are at 2:40."
+  },
+  {
+   "from": "Goalie Mom",
+   "text": "Front desk said no late checkout. Lobby guy said yes."
+  }
+ ],
+ "end": "Nobody checked with the kids. They were in the pool.",
+ "follow": "Follow for more from the rink.",
+ "music": {
+  "bpm": 92,
+  "seed": 151,
+  "prog": "a_e_fsm_d",
+  "lead": "pluck",
+  "arp_density": 0.75
+ }
+}

@@ -10,6 +10,8 @@ Each series gets its own look instead of the shared navy page:
                spec "icon": toque | whistle (2026-11-27).
   hotel     -> 4 AM Club, tournament-hotel edition: dark room, curtain light sliver, nightstand
                seven-segment alarm clock ticking to each timestamp (2026-11-27).
+  groupchat -> topical: the team parents' group chat at night on a drawn phone, role-labelled
+               senders, typing dots, bubbles pop in and the thread scrolls (2026-11-28).
   scoreboard-> topical/parents' scoreboard: rink rafters + scoreboard, amber seven-segment
                stat rows that light up one by one (2026-11-27).
 
@@ -887,6 +889,217 @@ def draw_whistle(size=260, body=(200, 206, 214), dark=(70, 76, 88), cord=(196, 4
 ICONS = {"toque": draw_toque, "whistle": draw_whistle}
 
 
+
+# ---------------------------------------------------------------- GROUP CHAT (added 2026-11-28)
+# The team parents' group chat at night: phone on a dark hotel-room backdrop, header with a
+# drawn puck avatar, role-labelled senders (never names), typing dots before each bubble,
+# bubbles pop up and the thread scrolls once it fills the screen.
+PHONE = (74, 300, W - 74, 1800)
+SCREEN = (PHONE[0] + 22, PHONE[1] + 22, PHONE[2] - 22, PHONE[3] - 22)
+CHAT_TOP = SCREEN[1] + 220
+CHAT_BOT = SCREEN[3] - 130
+ROLE_COLORS = [(110, 200, 255), (255, 170, 90), (150, 230, 140), (230, 140, 230), (255, 220, 110)]
+ME_BUBBLE = (214, 48, 60)
+THEM_BUBBLE = (44, 46, 54)
+
+
+def chat_bg(seed):
+    """Dark hotel room, lamp glow from one side, soft bokeh."""
+    img = vgrad(W, H, (34, 24, 20), (10, 9, 12)).convert("RGBA")
+    gl = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(gl)
+    gd.ellipse([-260, 80, 420, 760], fill=(255, 170, 90, 120))
+    rnd = random.Random(seed)
+    for _ in range(14):
+        x, y, r = rnd.randint(0, W), rnd.randint(0, H), rnd.randint(20, 70)
+        gd.ellipse([x - r, y - r, x + r, y + r], fill=(255, 200, 150, rnd.randint(14, 40)))
+    img.alpha_composite(gl.filter(ImageFilter.GaussianBlur(40)))
+    return noise_overlay(img.convert("RGB"), 4, seed)
+
+
+def draw_puck(size=96):
+    S = size * 3
+    im = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse([0, 0, S - 1, S - 1], fill=(226, 54, 66))
+    cx, cy = S // 2, S // 2
+    w, h = int(S * 0.56), int(S * 0.2)
+    d.ellipse([cx - w // 2, cy - h // 2 + int(S * 0.08), cx + w // 2, cy + h // 2 + int(S * 0.08)], fill=(12, 12, 14))
+    d.rectangle([cx - w // 2, cy - int(S * 0.02), cx + w // 2, cy + int(S * 0.08)], fill=(12, 12, 14))
+    d.ellipse([cx - w // 2, cy - h // 2 - int(S * 0.02), cx + w // 2, cy + h // 2 - int(S * 0.02)], fill=(46, 46, 52))
+    return im.resize((size, size), Image.LANCZOS)
+
+
+def chat_layer(spec):
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rounded_rectangle([PHONE[0] + 8, PHONE[1] + 24, PHONE[2] + 8, PHONE[3] + 24], 90, fill=(0, 0, 0, 170))
+    lay.alpha_composite(sh.filter(ImageFilter.GaussianBlur(24)))
+    d = ImageDraw.Draw(lay)
+    d.rounded_rectangle(PHONE, 90, fill=(20, 20, 24, 255), outline=(70, 70, 78, 255), width=4)
+    d.rounded_rectangle(SCREEN, 72, fill=(12, 13, 16, 255))
+    x0, y0, x1, y1 = SCREEN
+    # status bar
+    d.text((x0 + 70, y0 + 34), spec.get("clock", "10:47"), font=font(INTER_SB, 34), fill=(235, 235, 240, 255))
+    d.rounded_rectangle([W // 2 - 90, y0 + 26, W // 2 + 90, y0 + 74], 24, fill=(0, 0, 0, 255))
+    bx = x1 - 120
+    d.rounded_rectangle([bx, y0 + 38, bx + 56, y0 + 64], 6, outline=(235, 235, 240, 255), width=3)
+    d.rectangle([bx + 4, y0 + 42, bx + 4 + int(48 * spec.get("battery", 0.18)), y0 + 60], fill=(255, 80, 70, 255))
+    # header
+    hy = y0 + 104
+    d.text((x0 + 44, hy + 18), "<", font=font(INTER_B, 56), fill=(110, 170, 255, 255))
+    lay.alpha_composite(draw_puck(92), (x0 + 100, hy))
+    d.text((x0 + 214, hy + 6), spec["group"], font=font(INTER_B, 40), fill=(240, 240, 244, 255))
+    d.text((x0 + 214, hy + 56), spec.get("members", "14 members"), font=font(INTER_M, 30), fill=(140, 144, 156, 255))
+    d.line([(x0, y0 + 216), (x1, y0 + 216)], fill=(40, 42, 48, 255), width=2)
+    # input bar
+    d.line([(x0, y1 - 120), (x1, y1 - 120)], fill=(40, 42, 48, 255), width=2)
+    d.rounded_rectangle([x0 + 40, y1 - 98, x1 - 130, y1 - 30], 34, outline=(70, 72, 80, 255), width=3)
+    d.text((x0 + 76, y1 - 84), "Message", font=font(INTER_M, 34), fill=(110, 112, 122, 255))
+    d.ellipse([x1 - 112, y1 - 100, x1 - 40, y1 - 28], fill=(110, 170, 255, 255))
+    d.polygon([(x1 - 92, y1 - 64), (x1 - 58, y1 - 80), (x1 - 70, y1 - 48)], fill=(12, 13, 16, 255))
+    return lay
+
+
+MSG_F = None
+
+
+def _msg_geom(spec):
+    """Precompute each bubble's lines, size and y offset in the thread."""
+    mf = font(INTER_M, 44)
+    roles = {}
+    out, y = [], 0
+    for m in spec["messages"]:
+        me = m["from"] == "Me"
+        if not me and m["from"] not in roles:
+            roles[m["from"]] = ROLE_COLORS[len(roles) % len(ROLE_COLORS)]
+        lines = wrap(mf, m["text"], 600)
+        bw = max(mf.getlength(l) for l in lines) + 60
+        bh = len(lines) * 56 + 36
+        lab = 0 if me else 42
+        out.append(dict(m=m, me=me, lines=lines, bw=int(bw), bh=bh, lab=lab, y=y, color=roles.get(m["from"])))
+        y += lab + bh + 26
+    return out
+
+
+def render_chat(spec, t, bg, lay, geom, header=True):
+    img = bg.copy().convert("RGBA")
+    a = ease((t - COVER_SECS) / 0.5) if header else 0
+    draw_text_alpha(img, (W // 2, 70), spec["kicker"], font(INTER_B, 36), (255, 150, 140), a, anchor="ma")
+    draw_text_alpha(img, (W // 2, 120), spec["title_small"], font(ANTON, 110), WHITE, a, anchor="ma")
+    img.alpha_composite(lay)
+    x0, y0, x1, y1 = SCREEN
+    t0, step = spec["first"], spec["step"]
+    n = len(geom)
+    end_t = t0 + n * step
+    # how many shown, and the scroll needed so the newest bubble sits above the input bar
+    shown = [i for i in range(n) if t >= t0 + i * step]
+    content_h = 0
+    if shown:
+        g = geom[shown[-1]]
+        content_h = g["y"] + g["lab"] + g["bh"]
+    typing = None
+    if len(shown) < n:
+        nxt = len(shown)
+        tn = t0 + nxt * step
+        if tn - 0.75 <= t < tn and geom[nxt]["m"].get("typing", True):
+            typing = geom[nxt]
+    need = content_h + (110 if typing else 0)
+    avail = CHAT_BOT - (CHAT_TOP + 80) - 24
+    # smooth scroll target
+    def scroll_at(tt):
+        sh = [i for i in range(n) if tt >= t0 + i * step]
+        ch = 0
+        if sh:
+            gg = geom[sh[-1]]; ch = gg["y"] + gg["lab"] + gg["bh"]
+        return max(0, ch - avail)
+    s_prev = scroll_at(t - 0.3)
+    s_now = scroll_at(t)
+    last_t = t0 + (len(shown) - 1) * step if shown else 0
+    k = ease((t - last_t) / 0.3) if shown else 1
+    scroll = s_prev + (s_now - s_prev) * k
+    if typing:
+        scroll = max(scroll, need - avail)
+    chat = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(chat)
+    # day chip
+    cy = CHAT_TOP + 10 - scroll
+    chip = spec.get("chip", "Today 10:47 PM")
+    cf = font(INTER_SB, 28)
+    cw = cf.getlength(chip) + 40
+    d.rounded_rectangle([W // 2 - cw / 2, cy, W // 2 + cw / 2, cy + 44], 22, fill=(34, 36, 42, 255))
+    d.text((W // 2, cy + 8), chip, font=cf, fill=(150, 154, 166, 255), anchor="ma")
+    base_y = CHAT_TOP + 80 - scroll
+    mf = font(INTER_M, 44)
+    for i in shown:
+        g = geom[i]
+        ti = t0 + i * step
+        p = ease((t - ti) / 0.28)
+        y = base_y + g["y"] + int(30 * (1 - p))
+        if g["me"]:
+            bx1 = x1 - 40; bx0 = bx1 - g["bw"]
+            fill = ME_BUBBLE
+        else:
+            bx0 = x0 + 40; bx1 = bx0 + g["bw"]
+            fill = THEM_BUBBLE
+            d.text((bx0 + 18, y), g["m"]["from"], font=font(INTER_B, 30), fill=g["color"] + (int(255 * p),))
+        by = y + g["lab"]
+        d.rounded_rectangle([bx0, by, bx1, by + g["bh"]], 34, fill=fill + (int(255 * p),))
+        ly = by + 16
+        for ln in g["lines"]:
+            d.text((bx0 + 30, ly), ln, font=mf, fill=(245, 245, 248, int(255 * p)))
+            ly += 56
+        if g["m"].get("react") and t >= ti + 0.9:
+            rp = ease((t - ti - 0.9) / 0.25)
+            rx = bx1 - 20 if not g["me"] else bx0 + 20
+            ry = by + g["bh"] - 14
+            d.rounded_rectangle([rx - 44, ry, rx + 44, ry + 48], 24, fill=(60, 62, 70, int(255 * rp)), outline=(12, 13, 16, int(255 * rp)), width=4)
+            d.text((rx, ry + 8), g["m"]["react"], font=font(INTER_B, 28), fill=(255, 255, 255, int(255 * rp)), anchor="ma")
+    if typing:
+        y = base_y + typing["y"]
+        bx0 = x0 + 40 if not typing["me"] else x1 - 40 - 150
+        if not typing["me"]:
+            d.text((bx0 + 18, y), typing["m"]["from"] + " is typing", font=font(INTER_M, 28), fill=(140, 144, 156, 255))
+            y += 42
+        d.rounded_rectangle([bx0, y, bx0 + 150, y + 76], 38, fill=(THEM_BUBBLE if not typing["me"] else ME_BUBBLE) + (255,))
+        for j in range(3):
+            ph = (t * 3.2 - j * 0.33) % 1.0
+            r = 10 + 4 * math.sin(ph * math.pi) if ph < 1 else 10
+            cx = bx0 + 42 + j * 33
+            d.ellipse([cx - r, y + 38 - r, cx + r, y + 38 + r], fill=(200, 200, 208, 255))
+    # clip thread to the chat area
+    mask = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(mask).rectangle([x0, CHAT_TOP, x1, CHAT_BOT], fill=255)
+    clipped = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    clipped.paste(chat, (0, 0), Image.composite(chat.split()[3], Image.new("L", (W, H), 0), mask))
+    img.alpha_composite(clipped)
+    if t >= end_t:
+        a2 = ease((t - end_t) / 0.6)
+        ov = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        ImageDraw.Draw(ov).rounded_rectangle([x0, y0, x1, y1], 72, fill=(6, 6, 8, int(250 * a2)))
+        img.alpha_composite(ov)
+        f = font(INTER_B, 56)
+        lines = wrap(f, spec["end"], x1 - x0 - 140)
+        yy = (y0 + y1) // 2 - (len(lines) * 74 + 110) // 2
+        for ln in lines:
+            draw_text_alpha(img, (W // 2, yy), ln, f, WHITE, a2, dy=int(16 * (1 - a2)), anchor="ma")
+            yy += 74
+        a3 = ease((t - end_t - 1.2) / 0.6)
+        draw_text_alpha(img, (W // 2, yy + 60), spec["follow"], font(INTER_B, 38), (255, 150, 140), a3, anchor="ma")
+    return img
+
+
+def chat_cues(spec):
+    t0, step = spec["first"], spec["step"]; ms = spec["messages"]
+    end_t = t0 + len(ms) * step
+    cues = [(0.3, t0 - 0.05, " ".join(spec["head"]).capitalize())]
+    for i, m in enumerate(ms):
+        who = "Me" if m["from"] == "Me" else m["from"]
+        cues.append((t0 + i * step, t0 + (i + 1) * step, who + ": " + m["text"]))
+    cues.append((end_t, spec["duration"] - 0.1, spec["end"]))
+    return cues, end_t
+
+
 # ---------------------------------------------------------------- driver
 def build(spec, outdir):
     name = spec["name"]
@@ -930,6 +1143,13 @@ def build(spec, outdir):
         render = lambda t: render_board(spec, t, bg, lay)
         cues, end_t = board_cues(spec)
         cov = cover_card(render_board(spec, COVER_SECS, bg, lay).convert("RGB"), spec["kicker"], spec["head"], spec.get("cover_sub"), kcolor=(255, 190, 80), panel=(8, 8, 10, 215))
+    elif kind == "groupchat":
+        bg = chat_bg(seed); lay = chat_layer(spec); geom = _msg_geom(spec)
+        render = lambda t: render_chat(spec, t, bg, lay, geom)
+        cues, end_t = chat_cues(spec)
+        frame = render_chat(spec, spec["first"] + 2 * spec["step"] + 0.5, bg, lay, geom, header=False).convert("RGB")
+        frame = Image.blend(frame.filter(ImageFilter.GaussianBlur(16)), Image.new("RGB", (W, H), (0, 0, 0)), 0.35)
+        cov = cover_card(frame, spec["kicker"], spec["head"], spec.get("cover_sub"), kcolor=(255, 150, 140), panel=(8, 8, 10, 200))
     else:
         raise SystemExit("unknown layout " + kind)
     cues.append((end_t + 1.2, dur, spec["follow"]))

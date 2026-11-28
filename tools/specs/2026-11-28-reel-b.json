@@ -1,0 +1,65 @@
+{
+ "name": "reel-b-4am-club-checkout-day",
+ "layout": "dashboard",
+ "seed": 163,
+ "duration": 22,
+ "first": 1.5,
+ "step": 2.4,
+ "kicker": "4 AM CLUB",
+ "title_small": "CHECKOUT DAY",
+ "head": [
+  "DAY 3. CHECKOUT.",
+  "4:58 AM."
+ ],
+ "cover_sub": "Third straight morning in the dark.",
+ "start_clock": "4:58",
+ "end_clock": "5:49",
+ "temp": "19°F",
+ "items": [
+  {
+   "time": "4:58",
+   "label": "Alarm. Third day.",
+   "sub": "Body stopped arguing.",
+   "cap": "Alarm. Third day. My body stopped arguing."
+  },
+  {
+   "time": "5:06",
+   "label": "Car packed in the dark.",
+   "sub": "Gear bag goes in last.",
+   "cap": "Car packed in the dark. Gear bag goes in last. Always."
+  },
+  {
+   "time": "5:13",
+   "label": "Windshield scraped.",
+   "sub": "With the hotel key card.",
+   "cap": "Windshield scraped. With the hotel key card."
+  },
+  {
+   "time": "5:21",
+   "label": "Waffle line, day three.",
+   "sub": "Same waffle. No complaints.",
+   "cap": "Waffle line, day three. Same waffle. No complaints."
+  },
+  {
+   "time": "5:32",
+   "label": "Kid asleep by the exit.",
+   "sub": "Seat belt on. Eyes off.",
+   "cap": "Kid's asleep before we leave the lot. Seat belt on, eyes off."
+  },
+  {
+   "time": "5:49",
+   "label": "Rink coffee.",
+   "sub": "She knows my order now.",
+   "cap": "Rink coffee. The lady at the counter knows my order now."
+  }
+ ],
+ "end": "Three days. One hotel. One rink. Tomorrow I sleep till six.",
+ "follow": "Follow for more from the rink.",
+ "music": {
+  "bpm": 66,
+  "seed": 163,
+  "prog": "dm_bb_f_c",
+  "drums": false,
+  "arp_density": 0.6
+ }
+}

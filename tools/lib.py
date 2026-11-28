@@ -121,6 +121,8 @@ PROGS = {
     "d_a_bm_g": [[50, 54, 57], [57, 61, 64], [59, 62, 66], [55, 59, 62]],
     "cm_ab_eb_bb": [[48, 51, 55], [56, 60, 63], [51, 55, 58], [46, 50, 53]],
     "em_am_d_g": [[52, 55, 59], [57, 60, 64], [50, 54, 57], [55, 59, 62]],
+    # added 2026-11-28
+    "a_e_fsm_d": [[57, 61, 64], [52, 56, 59], [54, 57, 61], [50, 54, 57]],
 }
 
 
@@ -136,6 +138,8 @@ def make_music(path, seconds, bpm=78, seed=1, prog="am_f_c_g", drums=True, arp_d
     for b in range(bars):
         ch = prog[b % 4]
         s0 = int(b * bar * SR)
+        if s0 >= len(out):  # slow tempos: last bar starts past the buffer (fixed 2026-11-28)
+            break
         for m in ch:
             p = _note(midi(m - 12), bar + 0.6, kind="pad") * 0.10
             out[s0:s0 + len(p)] += p[: len(out) - s0]
